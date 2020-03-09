@@ -51,7 +51,7 @@ io.on("connection", client => {
 
   client.on("sendGuess", ({ roomId, id, guess }, callback) => {
     const { cows, bulls } = processGuess(roomId, id, guess);
-    client.emit("guessResult", { cows, bulls, guess });
+    client.broadcast.to(roomId).emit("guessResult", { cows, bulls, guess, id });
     callback();
     if (bulls === 4) {
       io.to(roomId).emit("gameover");
