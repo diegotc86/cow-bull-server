@@ -1,6 +1,8 @@
 const express = require("express");
 const socketio = require("socket.io");
 const http = require("http");
+const cors = require("cors");
+
 const {
   createRoom,
   getRoom,
@@ -8,8 +10,9 @@ const {
   processGuess,
   checkRoom,
   setRoomFull,
-  getCurrent,
+  getCurrent
 } = require("./game");
+
 const router = require("./router");
 
 const PORT = 8000;
@@ -18,6 +21,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+app.use(cors());
 app.use(router);
 
 io.on("connection", client => {
@@ -69,4 +73,6 @@ io.on("connection", client => {
   });
 });
 
-server.listen(PORT, () => console.log("listening on port ", PORT));
+server.listen(process.env.PORT || PORT, () =>
+  console.log(`Server has started.`)
+);
